@@ -1,4 +1,4 @@
-package com.backendBegins.firstOne;
+package com.backendBegins.paymentapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

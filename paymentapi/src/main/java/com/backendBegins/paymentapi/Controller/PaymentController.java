@@ -1,8 +1,8 @@
-package com.backendBegins.firstOne.Controller;
+package com.backendBegins.paymentapi.Controller;
 
-import com.backendBegins.firstOne.DTO.PaymentRequest;
-import com.backendBegins.firstOne.DTO.PaymentResponse;
-import com.backendBegins.firstOne.Service.PaymentService;
+import com.backendBegins.paymentapi.DTO.PaymentRequest;
+import com.backendBegins.paymentapi.DTO.PaymentResponse;
+import com.backendBegins.paymentapi.Service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

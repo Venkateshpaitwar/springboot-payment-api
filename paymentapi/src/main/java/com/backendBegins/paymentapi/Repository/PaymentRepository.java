@@ -1,8 +1,7 @@
-package com.backendBegins.firstOne.Repository;
+package com.backendBegins.paymentapi.Repository;
 
-import com.backendBegins.firstOne.DTO.PaymentRequest;
-import com.backendBegins.firstOne.DTO.PaymentResponse;
-import com.backendBegins.firstOne.Entity.PaymentEntity;
+import com.backendBegins.paymentapi.DTO.PaymentRequest;
+import com.backendBegins.paymentapi.Entity.PaymentEntity;
 import org.springframework.stereotype.Repository;
 
 @Repository

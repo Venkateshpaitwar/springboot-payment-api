@@ -1,4 +1,4 @@
-package com.backendBegins.firstOne.DTO;
+package com.backendBegins.paymentapi.DTO;
 
 public class PaymentResponse {
     private Long paymentId;

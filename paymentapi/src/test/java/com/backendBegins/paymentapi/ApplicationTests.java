@@ -1,4 +1,4 @@
-package com.backendBegins.firstOne;
+package com.backendBegins.paymentapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

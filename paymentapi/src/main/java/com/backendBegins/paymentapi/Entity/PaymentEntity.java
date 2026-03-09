@@ -1,4 +1,4 @@
-package com.backendBegins.firstOne.Entity;
+package com.backendBegins.paymentapi.Entity;
 
 public class PaymentEntity {
     private Long id;
