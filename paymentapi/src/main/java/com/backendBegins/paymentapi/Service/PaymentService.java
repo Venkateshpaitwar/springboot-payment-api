@@ -16,7 +16,9 @@ public class PaymentService {
     public PaymentResponse getPaymentDetailsById(PaymentRequest internalRequestObject) {
 
         PaymentEntity paymentModel = paymentRepository.getPaymentById(internalRequestObject);
-
+        if(paymentModel == null){
+            throw new RuntimeException("Payment not found");
+        }
         PaymentResponse paymentResponse = mapModelToResponseDTO(paymentModel);
         return paymentResponse;
     }
