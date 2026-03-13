@@ -5,6 +5,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/firstOne/pom.xml" />
+        <option value="$PROJECT_DIR$/paymentapi/pom.xml" />
       </list>
     </option>
   </component>

@@ -15,10 +15,14 @@ public class PaymentService {
 
     public PaymentResponse getPaymentDetailsById(PaymentRequest internalRequestObject) {
 
-        PaymentEntity paymentModel = paymentRepository.getPaymentById(internalRequestObject);
+        PaymentEntity paymentModel = paymentRepository
+                .findById(internalRequestObject.getPaymentId())
+                .orElse(null);
+
         if(paymentModel == null){
-            throw new RuntimeException("Payment not found");
+            return null;
         }
+
         PaymentResponse paymentResponse = mapModelToResponseDTO(paymentModel);
         return paymentResponse;
     }
@@ -29,6 +33,18 @@ public class PaymentService {
         response.setPaymentId(paymentEntity.getId());
         response.setAmount(paymentEntity.getPaymentAmount());
         response.setCurrency(paymentEntity.getPaymentCurrency());
+
         return response;
+    }
+    public PaymentResponse createPayment(PaymentRequest request){
+
+        PaymentEntity paymentEntity = new PaymentEntity();
+        paymentEntity.setPaymentAmount(request.getAmount());
+        paymentEntity.setPaymentCurrency(request.getCurrency());
+        paymentEntity.setUserEmail(request.getUserEmail());
+
+        PaymentEntity savedPayment = paymentRepository.save(paymentEntity);
+
+        return mapModelToResponseDTO(savedPayment);
     }
 }
