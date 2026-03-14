@@ -3,6 +3,7 @@ package com.backendBegins.paymentapi.Service;
 import com.backendBegins.paymentapi.DTO.PaymentRequest;
 import com.backendBegins.paymentapi.DTO.PaymentResponse;
 import com.backendBegins.paymentapi.Entity.PaymentEntity;
+import com.backendBegins.paymentapi.Exception.PaymentNotFoundException;
 import com.backendBegins.paymentapi.Repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class PaymentService {
                 .orElse(null);
 
         if(paymentModel == null){
-            return null;
+            throw new PaymentNotFoundException("Payment not found");
         }
 
         PaymentResponse paymentResponse = mapModelToResponseDTO(paymentModel);
