@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/payments")
@@ -30,7 +31,7 @@ public class PaymentController {
     }
 
     @PostMapping
-    public ResponseEntity<PaymentResponse> createPayment(@RequestBody PaymentRequest request){
+    public ResponseEntity<PaymentResponse> createPayment(@Valid @RequestBody PaymentRequest request){
 
         PaymentResponse response = paymentService.createPayment(request);
 
