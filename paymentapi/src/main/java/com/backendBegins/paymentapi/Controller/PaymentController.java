@@ -1,13 +1,11 @@
 package com.backendBegins.paymentapi.Controller;
 
-import com.backendBegins.paymentapi.DTO.PaymentRequest;
-import com.backendBegins.paymentapi.DTO.PaymentResponse;
+import com.backendBegins.paymentapi.DTO.*;
 import com.backendBegins.paymentapi.Service.PaymentService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import jakarta.validation.Valid;
+import com.backendBegins.paymentapi.util.ApiResponseUtil;
 
 @RestController
 @RequestMapping("/payments")
@@ -20,21 +18,25 @@ public class PaymentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PaymentResponse> getPaymentById(@PathVariable Long id){
+    public ResponseEntity<ApiResponse<PaymentResponse>> getPaymentById(@PathVariable Long id){
 
         PaymentRequest internalRequestObj = new PaymentRequest();
         internalRequestObj.setPaymentId(id);
 
         PaymentResponse payment = paymentService.getPaymentDetailsById(internalRequestObj);
 
-        return ResponseEntity.ok(payment);
+        return ResponseEntity.ok(
+                ApiResponseUtil.success("Payment fetched successfully", payment)
+        );
     }
 
     @PostMapping
-    public ResponseEntity<PaymentResponse> createPayment(@Valid @RequestBody PaymentRequest request){
+    public ResponseEntity<ApiResponse<PaymentResponse>> createPayment(@Valid @RequestBody PaymentRequest request){
 
-        PaymentResponse response = paymentService.createPayment(request);
+        PaymentResponse payment = paymentService.createPayment(request);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(
+                ApiResponseUtil.success("Payment created successfully", payment)
+        );
     }
 }
