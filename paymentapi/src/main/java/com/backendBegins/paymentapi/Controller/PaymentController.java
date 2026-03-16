@@ -36,7 +36,6 @@ public class PaymentController {
         PaymentResponse payment = paymentService.createPayment(request);
 
         return ResponseEntity.ok(
-                ApiResponseUtil.success("Payment created successfully", payment)
-        );
+                ApiResponseUtil.success("Payment created successfully", payment));
     }
 }
