@@ -8,6 +8,8 @@ import com.backendBegins.paymentapi.Repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PaymentService {
 
@@ -47,5 +49,22 @@ public class PaymentService {
         PaymentEntity savedPayment = paymentRepository.save(paymentEntity);
 
         return mapModelToResponseDTO(savedPayment);
+    }
+
+    public List<PaymentResponse> getAllPayments(int page, int size) {
+
+        org.springframework.data.domain.Pageable pageable =
+                org.springframework.data.domain.PageRequest.of(page, size);
+
+        org.springframework.data.domain.Page<PaymentEntity> paymentPage =
+                paymentRepository.findAll(pageable);
+
+        List<PaymentResponse> responseList = new java.util.ArrayList<>();
+
+        for(PaymentEntity payment : paymentPage.getContent()){
+            responseList.add(mapModelToResponseDTO(payment));
+        }
+
+        return responseList;
     }
 }

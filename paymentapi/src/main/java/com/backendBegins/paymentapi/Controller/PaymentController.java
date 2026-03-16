@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.backendBegins.paymentapi.util.ApiResponseUtil;
+import java.util.*;
 
 @RestController
 @RequestMapping("/payments")
@@ -37,5 +38,17 @@ public class PaymentController {
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success("Payment created successfully", payment));
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<PaymentResponse>>> getAllPayments(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size){
+
+        List<PaymentResponse> payments = paymentService.getAllPayments(page, size);
+
+        return ResponseEntity.ok(
+                ApiResponseUtil.success("Payments fetched successfully", payments)
+        );
     }
 }
