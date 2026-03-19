@@ -26,8 +26,7 @@ public class PaymentService {
             throw new PaymentNotFoundException("Payment not found");
         }
 
-        PaymentResponse paymentResponse = mapModelToResponseDTO(paymentModel);
-        return paymentResponse;
+        return mapModelToResponseDTO(paymentModel);
     }
 
     private PaymentResponse mapModelToResponseDTO(PaymentEntity paymentEntity){
@@ -72,5 +71,25 @@ public class PaymentService {
                 .orElseThrow(() -> new PaymentNotFoundException("Payment not found"));
 
         paymentRepository.delete(payment);
+    }
+    public PaymentResponse updatePayment(Long id, PaymentRequest request) {
+
+        PaymentEntity payment = paymentRepository.findById(id)
+                .orElseThrow(() -> new PaymentNotFoundException("Payment not found"));
+
+
+        payment.setPaymentAmount(request.getAmount());
+        payment.setPaymentCurrency(request.getCurrency());
+        payment.setUserEmail(request.getUserEmail());
+
+        PaymentEntity updated = paymentRepository.save(payment);
+
+        PaymentResponse response = new PaymentResponse();
+        response.setPaymentId(updated.getId());
+        response.setAmount(updated.getPaymentAmount());
+        response.setCurrency(updated.getPaymentCurrency());
+        response.setUserEmail(updated.getUserEmail());
+
+        return response;
     }
 }

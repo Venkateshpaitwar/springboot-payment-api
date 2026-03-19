@@ -56,4 +56,11 @@ public class PaymentController {
         paymentService.deletePayment(id);
         return ResponseEntity.ok("Payment deleted successfully");
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<PaymentResponse> updatePayment(
+            @PathVariable Long id,
+            @Valid @RequestBody PaymentRequest request) {
+
+        return ResponseEntity.ok(paymentService.updatePayment(id, request));
+    }
 }

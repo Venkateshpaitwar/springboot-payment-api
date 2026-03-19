@@ -28,11 +28,22 @@ public class GlobalExceptionHandler {
         return error;
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions (MethodArgumentNotValidException ex){
-            Map<String, String> errors = new HashMap<>();
-            ex.getBindingResult().getFieldErrors().forEach(error ->
-                    errors.put(error.getField(), error.getDefaultMessage())
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(
+            MethodArgumentNotValidException ex,
+            HttpServletRequest request) {
+
+        List<String> errors = new ArrayList<>();
+
+        ex.getBindingResult().getFieldErrors().forEach(error ->
+                errors.add(error.getField() + ": " + error.getDefaultMessage())
         );
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimestamp(LocalDateTime.now());
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setMessage(errors.toString()); // or join them nicely
+        errorResponse.setPath(request.getRequestURI());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }

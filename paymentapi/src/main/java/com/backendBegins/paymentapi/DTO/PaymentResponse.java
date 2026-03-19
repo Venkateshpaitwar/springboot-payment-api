@@ -1,9 +1,10 @@
 package com.backendBegins.paymentapi.DTO;
-
 public class PaymentResponse {
+
     private Long paymentId;
     private double amount;
     private String currency;
+    private String userEmail;
 
     public Long getPaymentId() {
         return paymentId;
@@ -27,5 +28,13 @@ public class PaymentResponse {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 }
