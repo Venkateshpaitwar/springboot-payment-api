@@ -67,4 +67,10 @@ public class PaymentService {
 
         return responseList;
     }
+    public void deletePayment(Long id) {
+        PaymentEntity payment = paymentRepository.findById(id)
+                .orElseThrow(() -> new PaymentNotFoundException("Payment not found"));
+
+        paymentRepository.delete(payment);
+    }
 }

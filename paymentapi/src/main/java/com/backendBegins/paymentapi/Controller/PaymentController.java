@@ -51,4 +51,9 @@ public class PaymentController {
                 ApiResponseUtil.success("Payments fetched successfully", payments)
         );
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletePayment(@PathVariable Long id) {
+        paymentService.deletePayment(id);
+        return ResponseEntity.ok("Payment deleted successfully");
+    }
 }
