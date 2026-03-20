@@ -7,27 +7,35 @@ import com.backendBegins.paymentapi.Exception.PaymentNotFoundException;
 import com.backendBegins.paymentapi.Repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.ArrayList;
 
 @Service
 public class PaymentService {
 
+    private static final Logger logger = LoggerFactory.getLogger(PaymentService.class);
+
     @Autowired
     PaymentRepository paymentRepository;
 
+
     public PaymentResponse getPaymentDetailsById(PaymentRequest internalRequestObject) {
+
+        logger.info("Fetching payment with id: {}", internalRequestObject.getPaymentId());
 
         PaymentEntity paymentModel = paymentRepository
                 .findById(internalRequestObject.getPaymentId())
-                .orElse(null);
-
-        if(paymentModel == null){
-            throw new PaymentNotFoundException("Payment not found");
-        }
+                .orElseThrow(() -> {
+                    logger.error("Payment not found with id: {}", internalRequestObject.getPaymentId());
+                    return new PaymentNotFoundException("Payment not found");
+                });
 
         return mapModelToResponseDTO(paymentModel);
     }
+
 
     private PaymentResponse mapModelToResponseDTO(PaymentEntity paymentEntity){
 
@@ -35,22 +43,32 @@ public class PaymentService {
         response.setPaymentId(paymentEntity.getId());
         response.setAmount(paymentEntity.getPaymentAmount());
         response.setCurrency(paymentEntity.getPaymentCurrency());
+        response.setUserEmail(paymentEntity.getUserEmail());
 
         return response;
     }
-    public PaymentResponse createPayment(PaymentRequest request){
 
-        PaymentEntity paymentEntity = new PaymentEntity();
-        paymentEntity.setPaymentAmount(request.getAmount());
-        paymentEntity.setPaymentCurrency(request.getCurrency());
-        paymentEntity.setUserEmail(request.getUserEmail());
 
-        PaymentEntity savedPayment = paymentRepository.save(paymentEntity);
+    public PaymentResponse createPayment(PaymentRequest paymentRequest) {
+
+        logger.info("Creating payment for user: {}", paymentRequest.getUserEmail());
+
+        PaymentEntity payment = new PaymentEntity();
+        payment.setPaymentAmount(paymentRequest.getAmount());
+        payment.setPaymentCurrency(paymentRequest.getCurrency());
+        payment.setUserEmail(paymentRequest.getUserEmail());
+
+        PaymentEntity savedPayment = paymentRepository.save(payment);
+
+        logger.info("Payment created successfully with id: {}", savedPayment.getId());
 
         return mapModelToResponseDTO(savedPayment);
     }
 
+
     public List<PaymentResponse> getAllPayments(int page, int size) {
+
+        logger.info("Fetching all payments with page {} and size {}", page, size);
 
         org.springframework.data.domain.Pageable pageable =
                 org.springframework.data.domain.PageRequest.of(page, size);
@@ -58,7 +76,7 @@ public class PaymentService {
         org.springframework.data.domain.Page<PaymentEntity> paymentPage =
                 paymentRepository.findAll(pageable);
 
-        List<PaymentResponse> responseList = new java.util.ArrayList<>();
+        List<PaymentResponse> responseList = new ArrayList<>();
 
         for(PaymentEntity payment : paymentPage.getContent()){
             responseList.add(mapModelToResponseDTO(payment));
@@ -66,17 +84,33 @@ public class PaymentService {
 
         return responseList;
     }
+
+
     public void deletePayment(Long id) {
+
+        logger.info("Deleting payment with id: {}", id);
+
         PaymentEntity payment = paymentRepository.findById(id)
-                .orElseThrow(() -> new PaymentNotFoundException("Payment not found"));
+                .orElseThrow(() -> {
+                    logger.error("Payment not found with id: {}", id);
+                    return new PaymentNotFoundException("Payment not found");
+                });
 
         paymentRepository.delete(payment);
+
+        logger.info("Payment deleted successfully with id: {}", id);
     }
+
+
     public PaymentResponse updatePayment(Long id, PaymentRequest request) {
 
-        PaymentEntity payment = paymentRepository.findById(id)
-                .orElseThrow(() -> new PaymentNotFoundException("Payment not found"));
+        logger.info("Updating payment with id: {}", id);
 
+        PaymentEntity payment = paymentRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.error("Payment not found with id: {}", id);
+                    return new PaymentNotFoundException("Payment not found");
+                });
 
         payment.setPaymentAmount(request.getAmount());
         payment.setPaymentCurrency(request.getCurrency());
@@ -84,12 +118,8 @@ public class PaymentService {
 
         PaymentEntity updated = paymentRepository.save(payment);
 
-        PaymentResponse response = new PaymentResponse();
-        response.setPaymentId(updated.getId());
-        response.setAmount(updated.getPaymentAmount());
-        response.setCurrency(updated.getPaymentCurrency());
-        response.setUserEmail(updated.getUserEmail());
+        logger.info("Payment updated successfully with id: {}", updated.getId());
 
-        return response;
+        return mapModelToResponseDTO(updated);
     }
 }
