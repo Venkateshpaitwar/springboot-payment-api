@@ -22,14 +22,14 @@ public class PaymentService {
     PaymentRepository paymentRepository;
 
 
-    public PaymentResponse getPaymentDetailsById(PaymentRequest internalRequestObject) {
+    public PaymentResponse getPaymentDetailsById(Long id) {
 
-        logger.info("Fetching payment with id: {}", internalRequestObject.getPaymentId());
+        logger.info("Fetching payment with id: {}", id);
 
         PaymentEntity paymentModel = paymentRepository
-                .findById(internalRequestObject.getPaymentId())
+                .findById(id)
                 .orElseThrow(() -> {
-                    logger.error("Payment not found with id: {}", internalRequestObject.getPaymentId());
+                    logger.error("Payment not found with id: {}", id);
                     return new PaymentNotFoundException("Payment not found");
                 });
 

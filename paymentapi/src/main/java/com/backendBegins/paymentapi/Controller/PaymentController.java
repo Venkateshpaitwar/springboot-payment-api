@@ -21,10 +21,7 @@ public class PaymentController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<PaymentResponse>> getPaymentById(@PathVariable Long id){
 
-        PaymentRequest internalRequestObj = new PaymentRequest();
-        internalRequestObj.setPaymentId(id);
-
-        PaymentResponse payment = paymentService.getPaymentDetailsById(internalRequestObj);
+        PaymentResponse payment = paymentService.getPaymentDetailsById(id);
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success("Payment fetched successfully", payment)
