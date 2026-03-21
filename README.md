@@ -85,7 +85,37 @@ The application will start on:
 ```
 http://localhost:8080
 ```
+---
+## 📑 API Documentation
 
+This project uses **Swagger (OpenAPI)** for interactive API documentation.
+
+Swagger automatically generates API documentation from the Spring Boot controllers and DTOs.
+
+### Access Swagger UI
+
+After running the application, open:
+
+http://localhost:8080/swagger-ui/index.html
+
+### Features
+
+- View all available API endpoints
+- Inspect request and response models
+- Execute API requests directly from the browser
+- Explore validation rules and parameters
+
+### Example Endpoint
+
+POST /payments
+
+Request Body:
+
+{
+"amount": 1500,
+"currency": "INR",
+"userEmail": "user@gmail.com"
+}
 ---
 
 ## Future Improvements
