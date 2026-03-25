@@ -6,9 +6,12 @@ import com.backendBegins.paymentapi.Entity.PaymentEntity;
 import com.backendBegins.paymentapi.Exception.PaymentNotFoundException;
 import com.backendBegins.paymentapi.Repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -70,19 +73,14 @@ public class PaymentService {
 
         logger.info("Fetching all payments with page {} and size {}", page, size);
 
-        org.springframework.data.domain.Pageable pageable =
-                org.springframework.data.domain.PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size);
 
-        org.springframework.data.domain.Page<PaymentEntity> paymentPage =
-                paymentRepository.findAll(pageable);
+        Page<PaymentEntity> paymentPage = paymentRepository.findAll(pageable);
 
-        List<PaymentResponse> responseList = new ArrayList<>();
-
-        for(PaymentEntity payment : paymentPage.getContent()){
-            responseList.add(mapModelToResponseDTO(payment));
-        }
-
-        return responseList;
+        return paymentPage.getContent()
+                .stream()
+                .map(this::mapModelToResponseDTO)
+                .toList();
     }
 
 
@@ -121,5 +119,19 @@ public class PaymentService {
         logger.info("Payment updated successfully with id: {}", updated.getId());
 
         return mapModelToResponseDTO(updated);
+    }
+    public Page<PaymentEntity> getAllPayments(Pageable pageable) {
+        return paymentRepository.findAll(pageable);
+    }
+    private PaymentResponse mapToResponse(PaymentEntity entity) {
+
+        PaymentResponse response = new PaymentResponse();
+
+        response.setPaymentId(entity.getId());
+        response.setAmount(entity.getPaymentAmount());
+        response.setCurrency(entity.getPaymentCurrency());
+        response.setUserEmail(entity.getUserEmail());
+
+        return response;
     }
 }

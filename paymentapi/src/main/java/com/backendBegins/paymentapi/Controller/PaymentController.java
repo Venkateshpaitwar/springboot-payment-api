@@ -62,8 +62,11 @@ public class PaymentController {
     @Operation(summary = "Get all payments", description = "Retrieve a paginated list of payments")
     @GetMapping
     public ResponseEntity<ApiResponse<List<PaymentResponse>>> getAllPayments(
-            @Parameter(description = "Page number") @RequestParam(defaultValue = "0") int page,
-            @Parameter(description = "Number of records per page") @RequestParam(defaultValue = "5") int size){
+            @Parameter(description = "Page number")
+            @RequestParam(defaultValue = "0") int page,
+
+            @Parameter(description = "Number of records per page")
+            @RequestParam(defaultValue = "5") int size) {
 
         List<PaymentResponse> payments = paymentService.getAllPayments(page, size);
 
