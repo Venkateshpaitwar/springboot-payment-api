@@ -15,7 +15,9 @@ public class AuthController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/login")
-    public Map<String, String> login(@RequestParam String email) {
+    public Map<String, String> login(@RequestBody Map<String, String> request) {
+
+        String email = request.get("email");
 
         String token = jwtUtil.generateToken(email);
 
