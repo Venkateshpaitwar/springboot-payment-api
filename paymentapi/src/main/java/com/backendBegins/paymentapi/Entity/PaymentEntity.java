@@ -1,6 +1,8 @@
 package com.backendBegins.paymentapi.Entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 @Entity
 @Table(name = "payments")
@@ -13,6 +15,17 @@ public class PaymentEntity {
     private double paymentAmount;
     private String paymentCurrency;
     private String userEmail;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus status;
+
+    public PaymentStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PaymentStatus status) {
+        this.status = status;
+    }
 
     public Long getId() {
         return id;

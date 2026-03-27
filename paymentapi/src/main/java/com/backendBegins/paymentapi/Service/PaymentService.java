@@ -3,6 +3,7 @@ package com.backendBegins.paymentapi.Service;
 import com.backendBegins.paymentapi.DTO.PaymentRequest;
 import com.backendBegins.paymentapi.DTO.PaymentResponse;
 import com.backendBegins.paymentapi.Entity.PaymentEntity;
+import com.backendBegins.paymentapi.Entity.PaymentStatus;
 import com.backendBegins.paymentapi.Exception.PaymentNotFoundException;
 import com.backendBegins.paymentapi.Repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,7 @@ public class PaymentService {
         payment.setPaymentAmount(paymentRequest.getAmount());
         payment.setPaymentCurrency(paymentRequest.getCurrency());
         payment.setUserEmail(paymentRequest.getUserEmail());
+        payment.setStatus(PaymentStatus.PENDING);
 
         PaymentEntity savedPayment = paymentRepository.save(payment);
 
@@ -131,7 +133,9 @@ public class PaymentService {
         response.setAmount(entity.getPaymentAmount());
         response.setCurrency(entity.getPaymentCurrency());
         response.setUserEmail(entity.getUserEmail());
-
+        response.setStatus(
+                entity.getStatus() != null ? entity.getStatus().name() : "PENDING"
+        );
         return response;
     }
 }
