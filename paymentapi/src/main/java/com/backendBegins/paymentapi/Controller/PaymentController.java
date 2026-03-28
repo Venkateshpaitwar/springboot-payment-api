@@ -57,7 +57,15 @@ public class PaymentController {
                 ApiResponseUtil.success("Payment created successfully", payment)
         );
     }
+    @PostMapping("/{id}/process")
+    public ResponseEntity<ApiResponse<PaymentResponse>> processPayment(@PathVariable Long id) {
 
+        PaymentResponse response = paymentService.processPayment(id);
+
+        return ResponseEntity.ok(
+                ApiResponseUtil.success("Payment processed successfully", response)
+        );
+    }
 
     @Operation(summary = "Get all payments", description = "Retrieve a paginated list of payments")
     @GetMapping

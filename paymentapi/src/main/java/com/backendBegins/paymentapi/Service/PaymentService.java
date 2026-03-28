@@ -138,4 +138,30 @@ public class PaymentService {
         );
         return response;
     }
+    public PaymentResponse processPayment(Long id) {
+
+        logger.info("Processing payment with id: {}", id);
+
+        PaymentEntity payment = paymentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Payment not found"));
+
+        if (payment.getStatus() != PaymentStatus.PENDING) {
+            throw new RuntimeException("Payment already processed");
+        }
+
+        // simulate payment result
+        boolean success = Math.random() > 0.5;
+
+        if (success) {
+            payment.setStatus(PaymentStatus.SUCCESS);
+        } else {
+            payment.setStatus(PaymentStatus.FAILED);
+        }
+
+        PaymentEntity updatedPayment = paymentRepository.save(payment);
+
+        logger.info("Payment processed with status: {}", updatedPayment.getStatus());
+
+        return mapToResponse(updatedPayment);
+    }
 }
