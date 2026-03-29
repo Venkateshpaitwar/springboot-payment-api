@@ -3,6 +3,7 @@ package com.backendBegins.paymentapi.Controller;
 import com.backendBegins.paymentapi.DTO.PaymentRequest;
 import com.backendBegins.paymentapi.DTO.PaymentResponse;
 import com.backendBegins.paymentapi.DTO.ApiResponse;
+import com.backendBegins.paymentapi.Entity.PaymentStatus;
 import com.backendBegins.paymentapi.Service.PaymentService;
 import com.backendBegins.paymentapi.util.ApiResponseUtil;
 import jakarta.validation.Valid;
@@ -77,6 +78,17 @@ public class PaymentController {
                 ApiResponseUtil.success("Payments fetched successfully", payments)
         );
     }
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<ApiResponse<List<PaymentResponse>>> getPaymentsByStatus(
+            @PathVariable PaymentStatus status){
+        List<PaymentResponse> payments = paymentService.getPaymentsByStatus(status);
+
+        return ResponseEntity.ok(
+                ApiResponseUtil.success("Payments fetched successfully", payments)
+        );
+    }
+
 
     @Operation(summary = "Get all payments", description = "Retrieve a paginated list of payments")
     @GetMapping

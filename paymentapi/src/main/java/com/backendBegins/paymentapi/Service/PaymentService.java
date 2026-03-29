@@ -108,7 +108,14 @@ public class PaymentService {
                 .map(this::mapToResponse)
                 .toList();
     }
+    public List<PaymentResponse> getPaymentsByStatus(PaymentStatus status) {
 
+        List<PaymentEntity> payments = paymentRepository.findByStatus(status);
+
+        return payments.stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
     public PaymentResponse updatePayment(Long id, PaymentRequest request) {
 
         logger.info("Updating payment with id: {}", id);
