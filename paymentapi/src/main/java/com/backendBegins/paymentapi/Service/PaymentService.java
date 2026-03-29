@@ -100,7 +100,14 @@ public class PaymentService {
 
         logger.info("Payment deleted successfully with id: {}", id);
     }
+    public List<PaymentResponse> getPaymentsByUser(String email) {
 
+        List<PaymentEntity> payments = paymentRepository.findByUserEmail(email);
+
+        return payments.stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
 
     public PaymentResponse updatePayment(Long id, PaymentRequest request) {
 

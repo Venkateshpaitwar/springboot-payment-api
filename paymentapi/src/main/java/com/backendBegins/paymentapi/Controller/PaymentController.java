@@ -67,6 +67,17 @@ public class PaymentController {
         );
     }
 
+    @GetMapping("/user/{email}")
+    public ResponseEntity<ApiResponse<List<PaymentResponse>>> getPaymentsByUser(
+            @PathVariable String email) {
+
+        List<PaymentResponse> payments = paymentService.getPaymentsByUser(email);
+
+        return ResponseEntity.ok(
+                ApiResponseUtil.success("Payments fetched successfully", payments)
+        );
+    }
+
     @Operation(summary = "Get all payments", description = "Retrieve a paginated list of payments")
     @GetMapping
     public ResponseEntity<ApiResponse<List<PaymentResponse>>> getAllPayments(
