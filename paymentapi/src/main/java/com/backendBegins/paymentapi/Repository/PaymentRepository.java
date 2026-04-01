@@ -10,4 +10,5 @@ import java.util.*;
 public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
     List<PaymentEntity> findByUserEmail(String userEmail);
     List<PaymentEntity> findByStatus(PaymentStatus status);
+    long countByStatus(PaymentStatus status);
 }

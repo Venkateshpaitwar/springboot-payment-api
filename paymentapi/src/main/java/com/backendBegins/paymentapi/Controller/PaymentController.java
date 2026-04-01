@@ -3,6 +3,7 @@ package com.backendBegins.paymentapi.Controller;
 import com.backendBegins.paymentapi.DTO.PaymentRequest;
 import com.backendBegins.paymentapi.DTO.PaymentResponse;
 import com.backendBegins.paymentapi.DTO.ApiResponse;
+import com.backendBegins.paymentapi.DTO.PaymentStatsResponse;
 import com.backendBegins.paymentapi.Entity.PaymentStatus;
 import com.backendBegins.paymentapi.Service.PaymentService;
 import com.backendBegins.paymentapi.util.ApiResponseUtil;
@@ -88,8 +89,15 @@ public class PaymentController {
                 ApiResponseUtil.success("Payments fetched successfully", payments)
         );
     }
+    @GetMapping("/stats")
+    public ResponseEntity<ApiResponse<PaymentStatsResponse>> getStats() {
 
+        PaymentStatsResponse stats = paymentService.getPaymentStats();
 
+        return ResponseEntity.ok(
+                ApiResponseUtil.success("Payment statistics fetched successfully", stats)
+        );
+    }
     @Operation(summary = "Get all payments", description = "Retrieve a paginated list of payments")
     @GetMapping
     public ResponseEntity<ApiResponse<List<PaymentResponse>>> getAllPayments(

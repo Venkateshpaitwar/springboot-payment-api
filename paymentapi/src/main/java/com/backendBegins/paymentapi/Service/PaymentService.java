@@ -2,6 +2,7 @@ package com.backendBegins.paymentapi.Service;
 
 import com.backendBegins.paymentapi.DTO.PaymentRequest;
 import com.backendBegins.paymentapi.DTO.PaymentResponse;
+import com.backendBegins.paymentapi.DTO.PaymentStatsResponse;
 import com.backendBegins.paymentapi.Entity.PaymentEntity;
 import com.backendBegins.paymentapi.Entity.PaymentStatus;
 import com.backendBegins.paymentapi.Exception.PaymentNotFoundException;
@@ -151,6 +152,17 @@ public class PaymentService {
                 entity.getStatus() != null ? entity.getStatus().name() : "PENDING"
         );
         return response;
+    }
+    public PaymentStatsResponse getPaymentStats() {
+
+        PaymentStatsResponse stats = new PaymentStatsResponse();
+
+        stats.setTotalPayments(paymentRepository.count());
+        stats.setSuccess(paymentRepository.countByStatus(PaymentStatus.SUCCESS));
+        stats.setFailed(paymentRepository.countByStatus(PaymentStatus.FAILED));
+        stats.setPending(paymentRepository.countByStatus(PaymentStatus.PENDING));
+
+        return stats;
     }
     public PaymentResponse processPayment(Long id) {
 
